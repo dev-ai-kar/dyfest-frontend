@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Kalaraag",
+  "name": "Kalaraag App by Vaibhav",
+  "description": "Kalaraag is an initiative taken up by the students of RAIT, who have come together as one for the sole purpose of creating and promoting Art. It is a team of engineering undergraduates who also happen to be musicians, actors, dancers, writers, painters, orators etc",
   "icons": [
     {
       "src": "favicon.ico",
@@ -13,6 +14,16 @@
       "sizes": "192x192"
     },
     {
+      "src": "logo256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "logo384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
       "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512"
@@ -20,6 +31,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#f69435",
+  "background_color": "#000000"
 }
