@@ -7,7 +7,7 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Button from "components/CustomButtons/Button.js";
-
+import Rating from "../../components/Rating.js";
 import imagesStyles from "assets/jss/material-kit-react/imagesStyles";
 
 import { cardTitle } from "assets/jss/material-kit-react.js";
@@ -15,6 +15,9 @@ import { cardTitle } from "assets/jss/material-kit-react.js";
 const style = {
   ...imagesStyles,
   cardTitle,
+  textMuted: {
+    color: "#6c757d",
+  },
 };
 
 const useStyles = makeStyles(style);
@@ -40,11 +43,16 @@ export default function CardImage({ product }) {
           Details
         </Button>
       </CardBody>
-      <CardFooter>
+      <CardFooter className={classes.textMuted}>
         <div className={`${classes.stats} ${classes.mlAuto}`}>
           <p>
             {product.rating} from {product.numReviews} reviews
           </p>
+          <Rating
+            value={product.rating}
+            text={`${product.numReviews} reviews`}
+            color={"#f8e825"}
+          />
         </div>
       </CardFooter>
     </Card>
