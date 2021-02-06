@@ -10,6 +10,7 @@ import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 
 import HeaderLinks from "components/Header/HeaderLinks.js";
+import HomeScreen from "./screens/HomeScreen.js";
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 
@@ -44,9 +45,7 @@ function App(props) {
       <div className={classNames(classes.main, classes.mainRaised)}>
         <main>
           <br />
-          <h1>Welcome</h1>
-          <h1>to The</h1>
-          <h1>other side</h1>
+          <HomeScreen />
           <br />
         </main>
       </div>
