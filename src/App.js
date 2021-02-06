@@ -1,3 +1,4 @@
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import "assets/scss/material-kit-react.scss";
 import "./App.css";
 // nodejs library that concatenates classes
@@ -11,6 +12,7 @@ import Footer from "components/Footer/Footer.js";
 
 import HeaderLinks from "components/Header/HeaderLinks.js";
 import HomeScreen from "./screens/HomeScreen.js";
+import EventScreen from "./screens/EventScreen.js";
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 
@@ -20,7 +22,7 @@ function App(props) {
   const classes = useStyles();
   const { ...rest } = props;
   return (
-    <div>
+    <Router>
       <Header
         brand="DY FEST"
         rightLinks={<HeaderLinks />}
@@ -45,14 +47,15 @@ function App(props) {
       <div className={classNames(classes.main, classes.mainRaised)}>
         <main>
           <br />
-          <HomeScreen />
+          <Route path="/" component={HomeScreen} exact />
+          <Route path="/product/:id" component={EventScreen} exact />
           <br />
         </main>
       </div>
       <br />
       <h1>Lets Do It</h1>
       <Footer />
-    </div>
+    </Router>
   );
 }
 

@@ -1,4 +1,6 @@
 import React from "react";
+// react components for routing our app without refresh
+import { Link } from "react-router-dom";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui icons
@@ -32,29 +34,27 @@ export default function CardImage({ product }) {
         src={product.image}
         alt="Card-img-cap"
       />
-      <CardBody>
-        <h4 className={classes.cardTitle}>{product.name}</h4>
-        <h5>₹{product.price}</h5>
-        <Button
-          color="primary"
-          href={`/product/${product._id}`}
-          target="_blank"
-        >
-          Details
-        </Button>
-      </CardBody>
-      <CardFooter className={classes.textMuted}>
-        <div className={`${classes.stats} ${classes.mlAuto}`}>
-          <p>
-            {product.rating} from {product.numReviews} reviews
-          </p>
-          <Rating
-            value={product.rating}
-            text={`${product.numReviews} reviews`}
-            color={"#f8e825"}
-          />
-        </div>
-      </CardFooter>
+      <Link to={`/product/${product._id}`} className={classes.link}>
+        <CardBody>
+          <h4 className={classes.cardTitle}>{product.name}</h4>
+          <h5>₹{product.price}</h5>
+          <Button color="primary" target="_blank">
+            Details
+          </Button>
+        </CardBody>
+        <CardFooter className={classes.textMuted}>
+          <div className={`${classes.stats} ${classes.mlAuto}`}>
+            <p>
+              {product.rating} from {product.numReviews} reviews
+            </p>
+            <Rating
+              value={product.rating}
+              text={`${product.numReviews} reviews`}
+              color={"#f8e825"}
+            />
+          </div>
+        </CardFooter>
+      </Link>
     </Card>
   );
 }

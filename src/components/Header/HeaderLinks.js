@@ -3,7 +3,7 @@ import React from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,7 +15,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { Apps, AccountBox, ShoppingCart } from "@material-ui/icons";
 
 // core components
-import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
 import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
@@ -28,20 +27,22 @@ export default function HeaderLinks(props) {
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
         <Button
-          href="#"
           color="transparent"
-          target="_blank"
+          target="_self"
           className={classes.navLink}
+          component={Link}
+          to="/login"
         >
           <AccountBox className={classes.icons} /> Login
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
         <Button
-          href="#"
           color="transparent"
-          target="_blank"
+          target="_self"
           className={classes.navLink}
+          component={Link}
+          to="/cart"
         >
           <ShoppingCart className={classes.icons} /> Cart
         </Button>
