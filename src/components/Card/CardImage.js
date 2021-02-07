@@ -34,7 +34,7 @@ export default function CardImage({ product }) {
         src={product.image}
         alt="Card-img-cap"
       />
-      <Link to={`/product/${product._id}`} className={classes.link}>
+      <Link to={`/event/${product._id}`} className={classes.link}>
         <CardBody>
           <h4 className={classes.cardTitle}>{product.name}</h4>
           <h5>₹{product.price}</h5>

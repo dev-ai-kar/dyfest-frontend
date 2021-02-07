@@ -48,7 +48,7 @@ function App(props) {
         <main>
           <br />
           <Route path="/" component={HomeScreen} exact />
-          <Route path="/product/:id" component={EventScreen} exact />
+          <Route path="/event/:id" component={EventScreen} />
           <br />
         </main>
       </div>
