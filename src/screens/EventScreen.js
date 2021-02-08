@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-import products from "../products.js";
+import axios from "axios";
+
+// import products from "../products.js";
 
 // Back Icon
 import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
@@ -21,7 +23,16 @@ const useStyles = makeStyles(styles);
 
 const EventScreen = ({ match }) => {
   const classes = useStyles();
-  const product = products.find((p) => p._id === match.params.id);
+
+  const [product, setProducts] = useState([]);
+
+  useEffect(() => {
+    async function fetchEvent() {
+      const { data } = await axios.get(`/api/events/${match.params.id}`);
+      setProducts(data);
+    }
+    fetchEvent();
+  }, [match.params.id]);
 
   return (
     <div className={classes.section}>
