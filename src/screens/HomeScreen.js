@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux"; //useSeletor to get specific parts of the state
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import Loader from "components/Loader";
+import Message from "components/Message";
 import CardImage from "components/Card/CardImage.js";
-import axios from "axios";
-
-// Get product data
-// import products from "../products";
+import { listEvents } from "../actions/eventActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,29 +13,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SpacingGrid() {
+export default function HomeScreen() {
   const classes = useStyles();
-  const [products, setProducts] = useState([]);
-
+  const dispatch = useDispatch();
+  const eventList = useSelector((state) => state.eventList);
+  const { error, loading, events } = eventList;
   useEffect(() => {
-    async function fetchEvents() {
-      const { data } = await axios.get("/api/events");
-      setProducts(data);
-    }
-    fetchEvents();
-  }, []);
+    dispatch(listEvents());
+  }, [dispatch]);
 
   return (
     <Grid container className={classes.root} spacing={2}>
       <Grid item xs={12}>
         <h1>Latest Events</h1>
-
         <Grid container justify="center" spacing={7}>
-          {products.map((product) => (
-            <Grid key={product._id} item>
-              <CardImage product={product} />
+          {loading ? (
+            <Grid item>
+              <Loader />
             </Grid>
-          ))}
+          ) : error ? (
+            <Message message={error} color="danger" />
+          ) : (
+            <>
+              {events.map((product) => (
+                <Grid key={product._id} item>
+                  <CardImage product={product} />
+                </Grid>
+              ))}
+            </>
+          )}
         </Grid>
       </Grid>
     </Grid>
