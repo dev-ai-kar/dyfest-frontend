@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 // @material-ui/core components
+import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-import axios from "axios";
-
+import { listEventDetails } from "../actions/eventActions";
+// import axios from "axios";
+import Loader from "components/Loader";
+import Message from "components/Message";
 // import products from "../products.js";
 
 // Back Icon
@@ -23,50 +26,53 @@ const useStyles = makeStyles(styles);
 
 const EventScreen = ({ match }) => {
   const classes = useStyles();
-
-  const [product, setProducts] = useState([]);
+  const dispatch = useDispatch();
+  const eventDetails = useSelector((state) => state.eventDetails);
+  const { loading, error, event } = eventDetails;
 
   useEffect(() => {
-    async function fetchEvent() {
-      const { data } = await axios.get(`/api/events/${match.params.id}`);
-      setProducts(data);
-    }
-    fetchEvent();
-  }, [match.params.id]);
+    dispatch(listEventDetails(match.params.id));
+  }, [dispatch, match]);
 
   return (
     <div className={classes.section}>
       <div className={classes.container}>
-        <div id="images">
-          <Button color="info" round component={Link} to="/">
-            <ArrowBackIos /> GO BACK
-          </Button>
+        <Button color="info" round component={Link} to="/">
+          <ArrowBackIos /> GO BACK
+        </Button>
 
-          <br />
-          <GridContainer>
-            <GridItem xs={12} md={6}>
-              <div className={classes.space50} />
-              <img
-                src={product.image}
-                alt={product.name}
-                className={
-                  classes.imgRaised +
-                  " " +
-                  classes.imgRounded +
-                  " " +
-                  classes.imgFluid
-                }
-              />
-            </GridItem>
-            <GridItem xs={12} md={3}>
-              <ListInfo product={product} />
-            </GridItem>
-            <GridItem xs={12} md={3}>
-              <ListCart product={product} />
-            </GridItem>
-          </GridContainer>
-          <GridContainer />
-        </div>
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <Message message={error} color="danger" />
+        ) : (
+          <div id="images">
+            <br />
+            <GridContainer>
+              <GridItem xs={12} md={6}>
+                <div className={classes.space50} />
+                <img
+                  src={event.image}
+                  alt={event.name}
+                  className={
+                    classes.imgRaised +
+                    " " +
+                    classes.imgRounded +
+                    " " +
+                    classes.imgFluid
+                  }
+                />
+              </GridItem>
+              <GridItem xs={12} md={3}>
+                <ListInfo product={event} />
+              </GridItem>
+              <GridItem xs={12} md={3}>
+                <ListCart product={event} />
+              </GridItem>
+            </GridContainer>
+            <GridContainer />
+          </div>
+        )}
         <div className={classes.space50} />
       </div>
     </div>

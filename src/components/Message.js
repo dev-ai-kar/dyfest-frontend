@@ -19,7 +19,7 @@ export default function Message({ message, color }) {
         <SnackbarContent
           message={
             <span>
-              <b>ALERT:</b>
+              <b>ALERT: </b>
               {message}
             </span>
           }
