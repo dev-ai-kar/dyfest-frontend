@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // @material-ui/core components
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,16 +24,21 @@ import ListCart from "components/ListCart.js";
 import styles from "assets/jss/material-kit-react/views/typographyStyle.js";
 const useStyles = makeStyles(styles);
 
-const EventScreen = ({ match }) => {
+const EventScreen = ({ match, history }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const eventDetails = useSelector((state) => state.eventDetails);
   const { loading, error, event } = eventDetails;
 
+  const [qty, setQty] = useState(1);
+
   useEffect(() => {
     dispatch(listEventDetails(match.params.id));
   }, [dispatch, match]);
 
+  const addToCartHandler = () => {
+    history.push(`/cart/${match.params.id}?qty=${qty}`);
+  };
   return (
     <div className={classes.section}>
       <div className={classes.container}>
@@ -67,7 +72,12 @@ const EventScreen = ({ match }) => {
                 <ListInfo product={event} />
               </GridItem>
               <GridItem xs={12} md={3}>
-                <ListCart product={event} />
+                <ListCart
+                  product={event}
+                  addToCartHandler={addToCartHandler}
+                  qty={qty}
+                  setQty={setQty}
+                />
               </GridItem>
             </GridContainer>
             <GridContainer />

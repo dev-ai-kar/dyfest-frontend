@@ -13,6 +13,7 @@ import Footer from "components/Footer/Footer.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
 import HomeScreen from "./screens/HomeScreen.js";
 import EventScreen from "./screens/EventScreen.js";
+import CartScreen from "./screens/CartScreen.js";
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 
@@ -49,6 +50,7 @@ function App(props) {
           <br />
           <Route path="/" component={HomeScreen} exact />
           <Route path="/event/:id" component={EventScreen} />
+          <Route path="/cart/:id?" component={CartScreen} />
           <br />
         </main>
       </div>
