@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 // core components
 import Message from "components/Message";
-import { addToCart } from "../actions/cartActions";
+import { addToCart, removeFromCart } from "../actions/cartActions";
 
 // Cart Items Details
 import { makeStyles } from "@material-ui/core/styles";
@@ -69,7 +69,7 @@ function CartScreen({ match, location, history }) {
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
-  console.log("cartItems : ", cartItems);
+  // console.log("cartItems : ", cartItems);
   useEffect(() => {
     if (eventId) {
       dispatch(addToCart(eventId, qty));
@@ -77,7 +77,8 @@ function CartScreen({ match, location, history }) {
   }, [dispatch, eventId, qty]);
 
   const removeFromCartHandler = (id) => {
-    console.log("remove", id);
+    // console.log("remove", id);
+    dispatch(removeFromCart(id));
   };
 
   const checkoutHandler = () => {
