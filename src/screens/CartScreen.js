@@ -69,7 +69,6 @@ function CartScreen({ match, location, history }) {
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
-  // console.log("cartItems : ", cartItems);
   useEffect(() => {
     if (eventId) {
       dispatch(addToCart(eventId, qty));
@@ -77,7 +76,6 @@ function CartScreen({ match, location, history }) {
   }, [dispatch, eventId, qty]);
 
   const removeFromCartHandler = (id) => {
-    // console.log("remove", id);
     dispatch(removeFromCart(id));
   };
 
@@ -87,6 +85,7 @@ function CartScreen({ match, location, history }) {
 
   return (
     <>
+      <br />
       <h1>Cart</h1>
 
       <Grid container>

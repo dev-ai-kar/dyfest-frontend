@@ -28,7 +28,7 @@ export default function HomeScreen() {
         <h1>Latest Events</h1>
         <Grid container justify="center" spacing={7}>
           {loading ? (
-            <Grid item>
+            <Grid item style={{ marginRight: "104px" }}>
               <Loader />
             </Grid>
           ) : error ? (

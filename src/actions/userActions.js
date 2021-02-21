@@ -13,16 +13,20 @@ export const login = (email, password) => async (dispatch) => {
       type: USER_LOGIN_REQUEST,
     });
     const config = {
-        headers:{
-            'Content-type':'application/json'
-        }
-    }
-    const { data } = await axios.post("/api/users/login/"{'username':email, 'password':password},config);
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
+    const { data } = await axios.post(
+      "/api/users/login/",
+      { username: email, password: password }, //checkme
+      config
+    );
     dispatch({
-        type:  USER_LOGIN_SUCCESS,
-        payload: data
-    })
-    localStorage.setItem('userInfo',JSON.stringify(data))
+      type: USER_LOGIN_SUCCESS,
+      payload: data,
+    });
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
