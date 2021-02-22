@@ -15,6 +15,7 @@ import HomeScreen from "./screens/HomeScreen.js";
 import EventScreen from "./screens/EventScreen.js";
 import CartScreen from "./screens/CartScreen.js";
 import LoginScreen from "./screens/LoginScreen.js";
+import RegisterScreen from "./screens/RegisterScreen.js";
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 
@@ -51,6 +52,7 @@ function App(props) {
           {/* <br /> */}
           <Route path="/" component={HomeScreen} exact />
           <Route path="/login" component={LoginScreen} />
+          <Route path="/register" component={RegisterScreen} />
           <Route path="/event/:id" component={EventScreen} />
           <Route path="/cart/:id?" component={CartScreen} />
           {/* <br /> */}

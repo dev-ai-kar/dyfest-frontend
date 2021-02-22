@@ -5,6 +5,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
 import Email from "@material-ui/icons/Email";
+import People from "@material-ui/icons/People";
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -24,20 +25,23 @@ import { Link } from "react-router-dom";
 import Loader from "components/Loader";
 import Message from "components/Message";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../actions/userActions";
+import { register } from "../actions/userActions";
 
 const useStyles = makeStyles(styles);
 
-export default function LoginScreen({ location, history }) {
+export default function RegisterScreen({ location, history }) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
   const dispatch = useDispatch();
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
-  const userLogin = useSelector((state) => state.userLogin);
-  const { error, loading, userInfo } = userLogin;
+  const userRegister = useSelector((state) => state.userRegister);
+  const { error, loading, userInfo } = userRegister;
 
   useEffect(() => {
     if (userInfo) {
@@ -47,7 +51,11 @@ export default function LoginScreen({ location, history }) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match");
+    } else {
+      dispatch(register(name, email, password));
+    }
   };
 
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
@@ -102,6 +110,7 @@ export default function LoginScreen({ location, history }) {
                     </Button>
                   </div>
                 </CardHeader>
+                {message && <Message message={message} color="danger" />}
                 {error && <Message message={error} color="danger" />}
                 {loading && (
                   // <GridItem>
@@ -110,21 +119,24 @@ export default function LoginScreen({ location, history }) {
                 )}
                 <p className={classes.divider}>Or Be Classical</p>
                 <CardBody>
-                  {/* <CustomInput
+                  <CustomInput
                     labelText="First Name..."
                     id="first"
                     formControlProps={{
                       fullWidth: true,
                     }}
                     inputProps={{
+                      required: true,
                       type: "text",
+                      value: name,
+                      onChange: (e) => setName(e.target.value),
                       endAdornment: (
                         <InputAdornment position="end">
                           <People className={classes.inputIconsColor} />
                         </InputAdornment>
                       ),
                     }}
-                  /> */}
+                  />
                   <CustomInput
                     labelText="Enter Email..."
                     id="email"
@@ -132,7 +144,8 @@ export default function LoginScreen({ location, history }) {
                       fullWidth: true,
                     }}
                     inputProps={{
-                      type: "text", //email
+                      required: true,
+                      type: "email",
                       value: email, //did not add brackets
                       onChange: (e) => setEmail(e.target.value),
                       endAdornment: (
@@ -144,11 +157,12 @@ export default function LoginScreen({ location, history }) {
                   />
                   <CustomInput
                     labelText="Password"
-                    id="pass"
+                    id="confirmpass"
                     formControlProps={{
                       fullWidth: true,
                     }}
                     inputProps={{
+                      required: true,
                       type: "password",
                       value: password, //did not add brackets
                       onChange: (e) => setPassword(e.target.value),
@@ -162,20 +176,41 @@ export default function LoginScreen({ location, history }) {
                       autoComplete: "off",
                     }}
                   />
+                  <CustomInput
+                    labelText="Confirm Password"
+                    id="pass"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      required: true,
+                      type: "password",
+                      value: confirmPassword,
+                      onChange: (e) => setConfirmPassword(e.target.value),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Icon className={classes.inputIconsColor}>
+                            lock_outline
+                          </Icon>
+                        </InputAdornment>
+                      ),
+                      autoComplete: "off",
+                    }}
+                  />
                 </CardBody>
                 <CardFooter className={classes.cardFooter}>
                   <Button simple color="primary" size="lg" type="submit">
-                    Get started
+                    Sign-In
                   </Button>
                 </CardFooter>
               </form>
               <Button
                 // className={classes.title}
                 component={Link}
-                to={redirect ? `/register?redirect=${redirect}` : "/register"}
+                to={redirect ? `/login?redirect=${redirect}` : "/login"}
                 color="primary"
               >
-                New Here !? Sign-Up Now
+                Already Have an Account? Login Here
               </Button>
             </Card>
           </GridItem>
