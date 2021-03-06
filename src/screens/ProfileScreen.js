@@ -10,7 +10,6 @@ import People from "@material-ui/icons/People";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Button from "components/CustomButtons/Button.js";
-import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardFooter from "components/Card/CardFooter.js";
@@ -20,11 +19,11 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import styles from "assets/jss/basicsStyle";
 
 // My Backend Config
-import { Link } from "react-router-dom";
 import Loader from "components/Loader";
 import Message from "components/Message";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserDetails } from "../actions/userActions";
+import { getUserDetails, updateUserProfile } from "../actions/userActions";
+import { USER_UPDATE_PROFILE_RESET } from "../constants/UserConstatns";
 
 const useStyles = makeStyles(styles);
 
@@ -43,26 +42,41 @@ function ProfileScreen({ history }) {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+  const { success } = userUpdateProfile;
+
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
     } else {
-      if (!user || !user.name) {
+      if (!user || !user.name || success) {
+        dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails("profile"));
       } else {
         setName(user.name);
         setEmail(user.email);
       }
     }
-  }, [dispatch, history, userInfo, user]);
+  }, [dispatch, history, userInfo, user, success]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setMessage("Passwords do not match");
     } else {
-      //   dispatch(register(name, email, password));
-      console.log("Updating..");
+      dispatch(
+        updateUserProfile({
+          // prettier-ignore
+          'id': user._id,
+          // prettier-ignore
+          'name': name,
+          // prettier-ignore
+          'email': email,
+          // prettier-ignore
+          'password': password,
+        })
+      );
+      setMessage("");
     }
   };
 
