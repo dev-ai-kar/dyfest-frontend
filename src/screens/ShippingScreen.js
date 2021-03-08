@@ -14,6 +14,8 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
+import CheckoutSteps from "../components/CheckoutSteps";
+
 import { container, title } from "assets/jss/material-kit-react.js";
 import { saveShippingAddress } from "../actions/cartActions";
 
@@ -63,6 +65,8 @@ export default function ShippingScreen({ location, history }) {
     <div className={classes.container}>
       <GridContainer justify="center">
         <GridItem xs={12} sm={12} md={8} style={{ marginTop: "50px" }}>
+          <CheckoutSteps step1 step2 />
+          <br />
           <form onSubmit={submitHandler}>
             <Card>
               <CardHeader color="primary">
