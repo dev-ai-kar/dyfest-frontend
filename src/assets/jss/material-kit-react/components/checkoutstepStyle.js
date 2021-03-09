@@ -41,10 +41,10 @@ const checkLinksStyle = (theme) => ({
     textDecoration: "none",
     margin: "0px",
     display: "inline-flex",
-    "&:hover,&:focus": {
-      color: "inherit",
-      background: "rgba(200, 200, 200, 0.2)",
-    },
+    // "&:hover,&:focus": {
+    //   color: "inherit",
+    //   background: "rgba(200, 200, 200, 0.2)",
+    // },
   },
   notificationNavLink: {
     color: "inherit",
