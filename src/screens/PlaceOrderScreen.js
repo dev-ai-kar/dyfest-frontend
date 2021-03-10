@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 // @material-ui/core components
@@ -15,7 +15,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 // import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
+// import CardFooter from "components/Card/CardFooter.js";
 import { container, title } from "assets/jss/material-kit-react.js";
 
 // import avatar from "assets/img/faces/marc.jpg";
@@ -25,6 +25,10 @@ import CheckoutSteps from "components/CheckoutSteps.js";
 
 import Typography from "@material-ui/core/Typography";
 import topostyles from "assets/jss/material-kit-react/views/typographyStyle.js";
+
+import { createOrder } from "../actions/orderActions";
+
+import { ORDER_CREATE_RESET } from "../constants/OrderConstants";
 
 const styles = {
   ...topostyles,
@@ -70,7 +74,12 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function PlaceOrderScreen() {
+export default function PlaceOrderScreen({ history }) {
+  const orderCreate = useSelector((state) => state.orderCreate);
+  const { order, error, success } = orderCreate;
+
+  const dispatch = useDispatch();
+
   const cart = useSelector((state) => state.cart);
   const classes = useStyles();
 
@@ -85,8 +94,30 @@ export default function PlaceOrderScreen() {
     Number(cart.shippingPrice) +
     Number(cart.taxPrice)
   ).toFixed(2);
+
+  if (!cart.paymentMethod) {
+    history.push("/payment");
+  }
+
+  useEffect(() => {
+    if (success) {
+      history.push(`/order/${order._id}`);
+      dispatch({ type: ORDER_CREATE_RESET });
+    }
+  }, [success, history, order, dispatch]);
+
   const placeOrder = () => {
-    console.log("Place Order");
+    dispatch(
+      createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      })
+    );
   };
   return (
     <div className={classes.container}>
@@ -148,7 +179,7 @@ export default function PlaceOrderScreen() {
                           </GridItem>
                           <GridItem md={2} xs={4}>
                             <Typography variant="subtitle1">
-                              {item.qty} X ₹{item.price} =
+                              {item.qty} X ₹{item.price} {" ="}
                             </Typography>
                           </GridItem>
                           <GridItem md={2} xs={8}>
@@ -277,12 +308,12 @@ export default function PlaceOrderScreen() {
                 </GridItem>
               </GridContainer> */}
             </CardBody>
-            <CardFooter>
+            {/* <CardFooter>
               <Button color="primary">Update Profile</Button>
-            </CardFooter>
+            </CardFooter> */}
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
+        <GridItem xs={12} sm={12} md={4} style={{ marginTop: "50px" }}>
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Order Summary</h4>
@@ -300,12 +331,15 @@ export default function PlaceOrderScreen() {
               <h4 className={classes.cardCategory}>Tax Price: </h4>
               <h4 className={classes.cardTitle}>₹{cart.taxPrice}</h4>
               <h4 className={classes.cardCategory}>Total: </h4>
-              <h4 className={classes.cardTitle}>₹{cart.totalPrice}</h4>
+              <h4 className={classes.cardTitle}>
+                <strong>₹{cart.totalPrice}</strong>
+              </h4>
               {/* <p className={classes.description}>
                 Don{"'"}t be scared of the truth because we need to restart the
                 human foundation in truth And I love you like Kanye loves Kanye
                 I love Rick Owens’ bed design but the back is...
               </p> */}
+              <div>{error && <Message message={error} color="danger" />}</div>
               <Button
                 color="primary"
                 round
