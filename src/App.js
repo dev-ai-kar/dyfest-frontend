@@ -22,6 +22,8 @@ import PaymentScreen from "./screens/PaymentScreen.js";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen.js";
 import OrderScreen from "./screens/OrderScreen.js";
 
+import UserListScreen from "./screens/UserListScreen.js";
+
 import styles from "assets/jss/material-kit-react/views/components.js";
 
 const useStyles = makeStyles(styles);
@@ -65,6 +67,8 @@ function App(props) {
           <Route path="/payment" component={PaymentScreen} />
           <Route path="/event/:id" component={EventScreen} />
           <Route path="/cart/:id?" component={CartScreen} />
+
+          <Route path="/admin/userlist" component={UserListScreen} />
           {/* <br /> */}
         </main>
       </div>

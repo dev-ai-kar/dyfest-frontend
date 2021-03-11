@@ -75,6 +75,37 @@ export default function HeaderLinks(props) {
         </ListItem>
       )}
 
+      {userInfo && userInfo.isAdmin && (
+        <ListItem className={classes.listItem}>
+          <CustomDropdown
+            noLiPadding
+            buttonText="Admin"
+            buttonProps={{
+              className: classes.navLink,
+              color: "transparent",
+            }}
+            buttonIcon={Apps}
+            dropdownList={[
+              <RouterLink to="/admin/userlist" className={classes.dropdownLink}>
+                Users
+              </RouterLink>,
+              <RouterLink
+                to="/admin/eventlist"
+                className={classes.dropdownLink}
+              >
+                Events
+              </RouterLink>,
+              <RouterLink
+                to="/admin/orderlist"
+                className={classes.dropdownLink}
+              >
+                Orders
+              </RouterLink>,
+            ]}
+          />
+        </ListItem>
+      )}
+
       <ListItem className={classes.listItem}>
         <Button
           color="transparent"
