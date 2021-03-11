@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Link as RouterLink } from "react-router-dom";
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -24,8 +26,21 @@ import Message from "components/Message";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
 import { USER_UPDATE_PROFILE_RESET } from "../constants/UserConstatns";
+import { listMyOrders } from "../actions/orderActions";
 
-const useStyles = makeStyles(styles);
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+
+const useStyles = makeStyles(styles, {
+  table: {
+    minWidth: 650,
+  },
+});
 
 function ProfileScreen({ history }) {
   const [name, setName] = useState("");
@@ -45,6 +60,9 @@ function ProfileScreen({ history }) {
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
   const { success } = userUpdateProfile;
 
+  const orderListMy = useSelector((state) => state.orderListMy);
+  const { loading: loadingOrders, error: errorOrders, orders } = orderListMy;
+
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
@@ -52,6 +70,7 @@ function ProfileScreen({ history }) {
       if (!user || !user.name || success) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails("profile"));
+        dispatch(listMyOrders());
       } else {
         setName(user.name);
         setEmail(user.email);
@@ -87,7 +106,7 @@ function ProfileScreen({ history }) {
         <GridItem md={4}>
           <form className={classes.form} onSubmit={submitHandler}>
             <CardHeader color="primary" className={classes.cardHeader}>
-              <h2>Update User Profile</h2>
+              <h2>Your Profile</h2>
             </CardHeader>
             {message && <Message message={message} color="danger" />}
             {error && <Message message={error} color="danger" />}
@@ -98,12 +117,13 @@ function ProfileScreen({ history }) {
             )}
             <CardBody>
               <CustomInput
-                labelText="First Name..."
+                labelText="Name"
                 id="first"
                 formControlProps={{
                   fullWidth: true,
                 }}
                 inputProps={{
+                  disabled: true,
                   required: true,
                   type: "text",
                   value: name,
@@ -116,12 +136,13 @@ function ProfileScreen({ history }) {
                 }}
               />
               <CustomInput
-                labelText="Enter Email..."
+                labelText="Email"
                 id="email"
                 formControlProps={{
                   fullWidth: true,
                 }}
                 inputProps={{
+                  disabled: true,
                   required: true,
                   type: "email",
                   value: email, //did not add brackets
@@ -184,6 +205,61 @@ function ProfileScreen({ history }) {
 
         <GridItem md={8}>
           <h2>My Orders</h2>
+          {loadingOrders ? (
+            <Loader />
+          ) : errorOrders ? (
+            <Message color="danger" message={errorOrders} />
+          ) : (
+            <TableContainer component={Paper}>
+              <Table className={classes.table} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">ID</TableCell>
+                    <TableCell align="center">Date</TableCell>
+                    <TableCell align="center">Total&nbsp;</TableCell>
+                    <TableCell align="center">Paid&nbsp;</TableCell>
+                    <TableCell align="center">Details&nbsp;</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {orders.map((order) => (
+                    <TableRow key={order._id}>
+                      {/* <TableCell component="th" scope="row">
+                        {order.name}
+                      </TableCell> */}
+                      <TableCell align="center">{order._id}</TableCell>
+                      <TableCell align="center">
+                        {order.createdAt.substring(0, 10)}
+                      </TableCell>
+                      <TableCell align="center">₹{order.totalPrice}</TableCell>
+                      <TableCell align="center">
+                        {order.isPaid ? (
+                          order.paidAt.substring(0, 10)
+                        ) : (
+                          <i
+                            className="fas fa-times"
+                            style={{ color: "red" }}
+                          ></i>
+                        )}
+                      </TableCell>
+                      <TableCell align="center">
+                        <Button
+                          size="sm"
+                          color="info"
+                          target="_self"
+                          className={classes.navLink}
+                          component={RouterLink}
+                          to={`/order/${order._id}`}
+                        >
+                          Details
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </GridItem>
       </GridContainer>
     </div>
