@@ -20,6 +20,7 @@ import ProfileScreen from "./screens/ProfileScreen.js";
 import ShippingScreen from "./screens/ShippingScreen.js";
 import PaymentScreen from "./screens/PaymentScreen.js";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen.js";
+import OrderScreen from "./screens/OrderScreen.js";
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 
@@ -59,8 +60,9 @@ function App(props) {
           <Route path="/register" component={RegisterScreen} />
           <Route path="/profile" component={ProfileScreen} />
           <Route path="/shipping" component={ShippingScreen} />
-          <Route path="/payment" component={PaymentScreen} />
           <Route path="/placeorder" component={PlaceOrderScreen} />
+          <Route path="/order/:id" component={OrderScreen} />
+          <Route path="/payment" component={PaymentScreen} />
           <Route path="/event/:id" component={EventScreen} />
           <Route path="/cart/:id?" component={CartScreen} />
           {/* <br /> */}
