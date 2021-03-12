@@ -25,7 +25,8 @@ import { Link } from "react-router-dom";
 import Loader from "components/Loader";
 import Message from "components/Message";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserDetails } from "../actions/userActions";
+import { getUserDetails, updateUser } from "../actions/userActions";
+import { USER_UPDATE_RESET } from "../constants/UserConstants";
 
 const useStyles = makeStyles(styles);
 
@@ -42,18 +43,31 @@ export default function UserEditScreen({ match, history }) {
   const userDetails = useSelector((state) => state.userDetails);
   const { error, loading, user } = userDetails;
 
+  const userUpdate = useSelector((state) => state.userUpdate);
+  const {
+    error: errorUpdate,
+    loading: loadingUpdate,
+    success: successUpdate,
+  } = userUpdate;
+
   useEffect(() => {
-    if (!user.name || user._id !== Number(userId)) {
-      dispatch(getUserDetails(userId));
+    if (successUpdate) {
+      dispatch({ type: USER_UPDATE_RESET });
+      history.push("admin/userlist/");
     } else {
-      setName(user.name);
-      setEmail(user.email);
-      setisAdmin(user.isAdmin);
+      if (!user.name || user._id !== Number(userId)) {
+        dispatch(getUserDetails(userId));
+      } else {
+        setName(user.name);
+        setEmail(user.email);
+        setisAdmin(user.isAdmin);
+      }
     }
-  }, [dispatch, user, userId]);
+  }, [dispatch, history, successUpdate, user, userId]);
 
   const submitHandler = (e) => {
     e.preventDefault();
+    dispatch(updateUser({ _id: user._id, name, email, isAdmin }));
   };
 
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
@@ -75,6 +89,8 @@ export default function UserEditScreen({ match, history }) {
         <GridContainer justify="center">
           <GridItem xs={12} sm={12} md={4}>
             <Card className={classes[cardAnimaton]}>
+              {loadingUpdate && <Loader />}
+              {errorUpdate && <Message message={errorUpdate} color="danger" />}
               {loading ? (
                 <Loader />
               ) : error ? (

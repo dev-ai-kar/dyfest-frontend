@@ -25,7 +25,7 @@ import Loader from "components/Loader";
 import Message from "components/Message";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
-import { USER_UPDATE_PROFILE_RESET } from "../constants/UserConstatns";
+import { USER_UPDATE_PROFILE_RESET } from "../constants/UserConstants";
 import { listMyOrders } from "../actions/orderActions";
 
 import Table from "@material-ui/core/Table";
