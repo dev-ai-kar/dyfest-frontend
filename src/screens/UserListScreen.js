@@ -94,7 +94,7 @@ function UserListScreen({ history }) {
                       target="_self"
                       className={classes.navLink}
                       component={Link}
-                      to={`/admin/user/${user._id}`}
+                      to={`/admin/user/${user._id}/edit/`}
                     >
                       <i className="fas fa-edit"></i>
                     </Button>

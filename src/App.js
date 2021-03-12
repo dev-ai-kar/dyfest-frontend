@@ -23,6 +23,7 @@ import PlaceOrderScreen from "./screens/PlaceOrderScreen.js";
 import OrderScreen from "./screens/OrderScreen.js";
 
 import UserListScreen from "./screens/UserListScreen.js";
+import UserEditScreen from "./screens/UserEditScreen.js";
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 
@@ -69,6 +70,7 @@ function App(props) {
           <Route path="/cart/:id?" component={CartScreen} />
 
           <Route path="/admin/userlist" component={UserListScreen} />
+          <Route path="/admin/user/:id/edit" component={UserEditScreen} />
           {/* <br /> */}
         </main>
       </div>
