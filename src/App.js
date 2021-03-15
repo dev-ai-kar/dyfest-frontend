@@ -24,6 +24,7 @@ import OrderScreen from "./screens/OrderScreen.js";
 
 import UserListScreen from "./screens/UserListScreen.js";
 import UserEditScreen from "./screens/UserEditScreen.js";
+import EventListScreen from "./screens/EventListScreen.js";
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 
@@ -71,6 +72,8 @@ function App(props) {
 
           <Route path="/admin/userlist" component={UserListScreen} />
           <Route path="/admin/user/:id/edit" component={UserEditScreen} />
+
+          <Route path="/admin/eventlist" component={EventListScreen} />
           {/* <br /> */}
         </main>
       </div>
