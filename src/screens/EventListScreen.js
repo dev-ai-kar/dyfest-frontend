@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loader from "components/Loader";
 import Message from "components/Message";
-import { listEvents, deleteEvent } from "../actions/eventActions";
+import { listEvents, deleteEvent, createEvent } from "../actions/eventActions";
+import { PRODUCT_CREATE_RESET } from "../constants/EventConstants";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "components/CustomButtons/Button.js";
@@ -36,16 +37,29 @@ function EventListScreen({ history, match }) {
     success: successDelete,
   } = eventDelete;
 
+  const eventCreate = useSelector((state) => state.eventCreate);
+  const {
+    loading: loadingCreate,
+    error: errorCreate,
+    success: successCreate,
+    event: createdEvent,
+  } = eventCreate;
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
-      dispatch(listEvents());
-    } else {
+    dispatch({ type: PRODUCT_CREATE_RESET });
+    if (!userInfo.isAdmin) {
       history.push("/login");
     }
-  }, [dispatch, history, userInfo]);
+
+    if (successCreate) {
+      history.push(`/admin/event/${createdEvent._id}/edit`);
+    } else {
+      dispatch(listEvents());
+    }
+  }, [dispatch, history, userInfo, successDelete, successCreate, createdEvent]);
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
@@ -56,7 +70,7 @@ function EventListScreen({ history, match }) {
   const classes = useStyles();
 
   const createEventHandler = (event) => {
-    // crreae event
+    dispatch(createEvent());
   };
 
   return (
@@ -69,8 +83,13 @@ function EventListScreen({ history, match }) {
         </Button>
       </h1>
       {/* component={Link} to="/" */}
+
       {loadingDelete && <Loader />}
       {errorDelete && <Message color="danger" message={errorDelete} />}
+
+      {loadingCreate && <Loader />}
+      {errorCreate && <Message color="danger" message={errorCreate} />}
+
       {loading ? (
         <Loader />
       ) : error ? (

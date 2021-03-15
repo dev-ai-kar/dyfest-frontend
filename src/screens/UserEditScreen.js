@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Icon from "@material-ui/core/Icon";
+// import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
 import Email from "@material-ui/icons/Email";
 import People from "@material-ui/icons/People";
+import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
+
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -27,6 +29,10 @@ import Message from "components/Message";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails, updateUser } from "../actions/userActions";
 import { USER_UPDATE_RESET } from "../constants/UserConstants";
+
+// For checkbox
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles(styles);
 
@@ -87,7 +93,7 @@ export default function UserEditScreen({ match, history }) {
       <Link to="/admin/userlist">GO BACK</Link>
       <div className={classes.container}>
         <GridContainer justify="center">
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={7}>
             <Card className={classes[cardAnimaton]}>
               {loadingUpdate && <Loader />}
               {errorUpdate && <Message message={errorUpdate} color="danger" />}
@@ -98,7 +104,16 @@ export default function UserEditScreen({ match, history }) {
               ) : (
                 <form className={classes.form} onSubmit={submitHandler}>
                   <CardHeader color="primary" className={classes.cardHeader}>
-                    <h4>Edit User</h4>
+                    <Button
+                      // size="lg"
+                      color="info"
+                      round
+                      component={Link}
+                      to="/admin/userlist"
+                    >
+                      <ArrowBackIos />
+                      GO BACK
+                    </Button>
                     {/* <div className={classes.socialLine}>
                         <Button
                           justIcon
@@ -128,8 +143,9 @@ export default function UserEditScreen({ match, history }) {
                           <i className={"fab fa-google-plus-g"} />
                         </Button>
                       </div> */}
+                    <h4>Edit User</h4>
                   </CardHeader>
-                  <p className={classes.divider}>Or Be Classical</p>
+                  {/* <p className={classes.divider}>Or Be Classical</p> */}
                   <CardBody>
                     <CustomInput
                       labelText="First Name..."
@@ -165,7 +181,18 @@ export default function UserEditScreen({ match, history }) {
                         ),
                       }}
                     />
-                    <CustomInput
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={isAdmin}
+                          onChange={(e) => setisAdmin(e.target.checked)}
+                          name="isAdmin"
+                          color="primary"
+                        />
+                      }
+                      label="isAdmin"
+                    />
+                    {/* <CustomInput
                       labelText="isAdmin"
                       id="isAdmin"
                       formControlProps={{

@@ -5,6 +5,7 @@ import {
   eventListReducer,
   eventDetailsReducer,
   eventDeleteReducer,
+  eventCreateReducer,
 } from "./reducers/eventsReducers";
 
 import { cartReducer } from "./reducers/cartReducers";
@@ -29,6 +30,7 @@ const reducer = combineReducers({
   eventList: eventListReducer,
   eventDetails: eventDetailsReducer,
   eventDelete: eventDeleteReducer,
+  eventCreate: eventCreateReducer,
 
   cart: cartReducer,
 
