@@ -4,6 +4,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import {
   eventListReducer,
   eventDetailsReducer,
+  eventDeleteReducer,
 } from "./reducers/eventsReducers";
 
 import { cartReducer } from "./reducers/cartReducers";
@@ -27,6 +28,7 @@ import {
 const reducer = combineReducers({
   eventList: eventListReducer,
   eventDetails: eventDetailsReducer,
+  eventDelete: eventDeleteReducer,
 
   cart: cartReducer,
 

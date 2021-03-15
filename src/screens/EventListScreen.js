@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loader from "components/Loader";
 import Message from "components/Message";
-import { listEvents } from "../actions/eventActions";
+import { listEvents, deleteEvent } from "../actions/eventActions";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "components/CustomButtons/Button.js";
@@ -29,6 +29,13 @@ function EventListScreen({ history, match }) {
   const eventList = useSelector((state) => state.eventList);
   const { loading, error, events } = eventList;
 
+  const eventDelete = useSelector((state) => state.eventDelete);
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = eventDelete;
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -43,6 +50,7 @@ function EventListScreen({ history, match }) {
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
       //Delete Product
+      dispatch(deleteEvent(id));
     }
   };
   const classes = useStyles();
@@ -61,7 +69,8 @@ function EventListScreen({ history, match }) {
         </Button>
       </h1>
       {/* component={Link} to="/" */}
-
+      {loadingDelete && <Loader />}
+      {errorDelete && <Message color="danger" message={errorDelete} />}
       {loading ? (
         <Loader />
       ) : error ? (
