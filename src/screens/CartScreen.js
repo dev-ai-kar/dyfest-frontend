@@ -113,7 +113,7 @@ function CartScreen({ match, location, history }) {
                     <Grid item md={3}>
                       <img
                         className={classes.imgRounded + " " + classes.imgFluid}
-                        src={item.image}
+                        src={`/static${item.image}`}
                         alt={item.name}
                       />
                     </Grid>

@@ -57,7 +57,7 @@ const EventScreen = ({ match, history }) => {
               <GridItem xs={12} md={6}>
                 <div className={classes.space50} />
                 <img
-                  src={event.image}
+                  src={`/static${event.image}`}
                   alt={event.name}
                   className={
                     classes.imgRaised +

@@ -31,7 +31,7 @@ export default function CardImage({ product }) {
       <img
         style={{ height: "225px", width: "100%", display: "block" }}
         className={classes.imgCardTop}
-        src={product.image}
+        src={`/static${product.image}`}
         alt="Card-img-cap"
       />
       <Link to={`/event/${product._id}`} className={classes.link}>

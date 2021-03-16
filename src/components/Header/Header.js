@@ -17,6 +17,7 @@ import Drawer from "@material-ui/core/Drawer";
 import Menu from "@material-ui/icons/Menu";
 // core components
 import styles from "assets/jss/material-kit-react/components/headerStyle.js";
+import dylogo from "assets/img/dyfestlogo.png";
 
 const useStyles = makeStyles(styles);
 
@@ -64,7 +65,8 @@ export default function Header(props) {
   });
   const brandComponent = (
     <Button className={classes.title} component={Link} to="/">
-      {brand}
+      {/* {brand} */}
+      <img src={dylogo} alt={brand} style={{ width: "100px" }} />
     </Button>
   );
   return (

@@ -24,7 +24,7 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
-import imagebg from "assets/img/bg7.jpg";
+// import imagebg from "assets/img/bg7.jpg";
 
 // My Backend Config
 import { Link } from "react-router-dom";
