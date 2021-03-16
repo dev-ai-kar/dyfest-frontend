@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -39,11 +40,11 @@ export default function EventEditScreen({ match, history }) {
   const eventId = match.params.id;
 
   const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
-  const [countInStock, setCountInStock] = useState("");
+  const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
 
@@ -96,6 +97,35 @@ export default function EventEditScreen({ match, history }) {
     );
   };
 
+  const uploadFileHandler = async (e) => {
+    console.log("file is uploading");
+    const file = e.target.files[0];
+    const formData = new FormData();
+
+    formData.append("image", file);
+    formData.append("event_id", eventId);
+
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/events/upload/",
+        formData,
+        config
+      );
+
+      setImage(data);
+      setUploading(false);
+    } catch (error) {
+      setUploading(false);
+    }
+  };
   // const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   // setTimeout(function () {
   //   setCardAnimation("");
@@ -211,7 +241,7 @@ export default function EventEditScreen({ match, history }) {
                     inputProps={{
                       type: "text",
                       value: image, //did not add brackets
-                      onChange: (e) => setImage(e.target.checked),
+                      onChange: (e) => setImage(e.target.value),
                       endAdornment: (
                         <InputAdornment position="end">
                           <PermMediaIcon className={classes.inputIconsColor}>
@@ -222,6 +252,38 @@ export default function EventEditScreen({ match, history }) {
                       autoComplete: "off",
                     }}
                   />
+                  {/* file uploader START */}
+                  <CustomInput
+                    labelText="file"
+                    id="file"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      type: "file",
+                      // value: image, //did not add brackets
+                      onChange: uploadFileHandler,
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <PermMediaIcon className={classes.inputIconsColor}>
+                            lock_outline
+                          </PermMediaIcon>
+                        </InputAdornment>
+                      ),
+                      autoComplete: "off",
+                    }}
+                  />
+                  {/* <div>
+                    <input
+                      type="file"
+                      placeholder="Enter Image"
+                      onChange={uploadFileHandler}
+                    />
+                  </div> */}
+                  {uploading && <Loader />}
+                  {/* <button onClick={uploadFileHandler}>Upload!</button> */}
+                  {/* {this.fileData()} */}
+                  {/* file uploader END */}
                   <CustomInput
                     labelText="Brand"
                     id="brand"
