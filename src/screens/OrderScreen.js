@@ -10,12 +10,12 @@ import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 // import CustomInput from "components/CustomInput/CustomInput.js";
 
-// import Button from "components/CustomButtons/Button.js";
+import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 // import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
-// import CardFooter from "components/Card/CardFooter.js";
+import CardFooter from "components/Card/CardFooter.js";
 import { container, title } from "assets/jss/material-kit-react.js";
 
 // import avatar from "assets/img/faces/marc.jpg";
@@ -26,7 +26,15 @@ import Message from "components/Message.js";
 import Typography from "@material-ui/core/Typography";
 import topostyles from "assets/jss/material-kit-react/views/typographyStyle.js";
 
-import { getOrderDetails } from "../actions/orderActions";
+import {
+  getOrderDetails,
+  payOrder,
+  deliverOrder,
+} from "../actions/orderActions";
+import {
+  ORDER_PAY_RESET,
+  ORDER_DELIVER_RESET,
+} from "../constants/OrderConstants";
 
 import Loader from "components/Loader";
 
@@ -81,6 +89,15 @@ export default function OrderScreen({ match }) {
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, error, loading } = orderDetails;
 
+  const orderPay = useSelector((state) => state.orderPay);
+  const { loading: loadingPay, success: successPay } = orderPay;
+
+  const orderDeliver = useSelector((state) => state.orderDeliver);
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   const classes = useStyles();
 
   if (!loading && !error) {
@@ -89,10 +106,26 @@ export default function OrderScreen({ match }) {
       .toFixed(2);
   }
   useEffect(() => {
-    if (!order || order._id !== Number(orderId)) {
+    if (
+      !order ||
+      order._id !== Number(orderId) ||
+      successPay ||
+      successDeliver
+    ) {
+      dispatch({ type: ORDER_PAY_RESET });
+      dispatch({ type: ORDER_DELIVER_RESET });
+
       dispatch(getOrderDetails(orderId));
     }
-  }, [dispatch, order, orderId]);
+  }, [dispatch, order, orderId, successDeliver, successPay]);
+
+  const payHandler = () => {
+    dispatch(payOrder(order));
+  };
+
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order));
+  };
 
   return loading ? (
     <Loader />
@@ -215,6 +248,23 @@ export default function OrderScreen({ match }) {
 
               <div>{error && <Message message={error} color="danger" />}</div>
             </CardBody>
+            <CardFooter style={{ flexDirection: "column" }}>
+              {loadingPay && <Loader />}
+              {userInfo && userInfo.isAdmin && !order.isPaid && (
+                <Button color="rose" onClick={payHandler}>
+                  Mark As Payed
+                </Button>
+              )}
+              {loadingDeliver && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                // order.isPaid &&
+                !order.isDelivered && (
+                  <Button color="rose" onClick={deliverHandler}>
+                    Mark As Delivered
+                  </Button>
+                )}
+            </CardFooter>
           </Card>
         </GridItem>
       </GridContainer>
