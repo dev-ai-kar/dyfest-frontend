@@ -30,7 +30,8 @@ import { Link } from "react-router-dom";
 import Loader from "components/Loader";
 import Message from "components/Message";
 import { useDispatch, useSelector } from "react-redux";
-import { listEventDetails } from "../actions/eventActions";
+import { listEventDetails, updateEvent } from "../actions/eventActions";
+import { PRODUCT_UPDATE_RESET } from "../constants/EventConstants";
 
 const useStyles = makeStyles(styles);
 
@@ -38,11 +39,11 @@ export default function EventEditScreen({ match, history }) {
   const eventId = match.params.id;
 
   const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
-  const [countInStock, setCountInStock] = useState(0);
+  const [countInStock, setCountInStock] = useState("");
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
 
@@ -53,48 +54,46 @@ export default function EventEditScreen({ match, history }) {
   const eventDetails = useSelector((state) => state.eventDetails);
   const { error, loading, event } = eventDetails;
 
-  // const eventUpdate = useSelector((state) => state.eventUpdate);
-  // const {
-  //   error: errorUpdate,
-  //   loading: loadingUpdate,
-  //   success: successUpdate,
-  // } = eventUpdate;
+  const eventUpdate = useSelector((state) => state.eventUpdate);
+  const {
+    error: errorUpdate,
+    loading: loadingUpdate,
+    success: successUpdate,
+  } = eventUpdate;
 
   useEffect(() => {
-    // if (true) {
-    //   //successUpdate
-    //   //successUpdate
-    //   // dispatch({ type: PRODUCT_UPDATE_RESET });
-    //   history.push("/admin/eventlist");
-    // } else {
-    if (!event.name || event._id !== Number(eventId)) {
-      dispatch(listEventDetails(eventId));
+    if (successUpdate) {
+      dispatch({ type: PRODUCT_UPDATE_RESET });
+      history.push("/admin/eventlist");
     } else {
-      setName(event.name);
-      setPrice(event.price);
-      setImage(event.image);
-      setBrand(event.brand);
-      setCategory(event.category);
-      setCountInStock(event.countInStock);
-      setDescription(event.description);
+      if (!event.name || event._id !== Number(eventId)) {
+        dispatch(listEventDetails(eventId));
+      } else {
+        setName(event.name);
+        setPrice(event.price);
+        setImage(event.image);
+        setBrand(event.brand);
+        setCategory(event.category);
+        setCountInStock(event.countInStock);
+        setDescription(event.description);
+      }
     }
-    // }
-  }, [dispatch, history, event, eventId]);
+  }, [dispatch, history, event, eventId, successUpdate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    // dispatch(
-    //   updateEvent({
-    //     _id: eventId,
-    //     name,
-    //     price,
-    //     image,
-    //     brand,
-    //     category,
-    //     countInStock,
-    //     description,
-    //   })
-    // );
+    dispatch(
+      updateEvent({
+        _id: eventId,
+        name,
+        price,
+        image,
+        brand,
+        category,
+        countInStock,
+        description,
+      })
+    );
   };
 
   // const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
@@ -118,6 +117,8 @@ export default function EventEditScreen({ match, history }) {
           {/* className={classes[cardAnimaton]} */}
 
           <Card>
+            {loadingUpdate && <Loader />}
+            {errorUpdate && <Message message={errorUpdate} color="danger" />}
             {loading ? (
               <Loader />
             ) : error ? (
@@ -186,14 +187,14 @@ export default function EventEditScreen({ match, history }) {
                   />
                   <CustomInput
                     labelText="Enter Price..."
-                    id="number"
+                    id="price"
                     formControlProps={{
                       fullWidth: true,
                     }}
                     inputProps={{
-                      type: "price",
+                      type: "number",
                       value: price, //did not add brackets
-                      onChange: (e) => setPrice(e.target.value),
+                      onChange: (e) => setPrice(Number(e.target.value)),
                       endAdornment: (
                         <InputAdornment position="end">
                           <LocalOfferIcon className={classes.inputIconsColor} />
@@ -229,7 +230,7 @@ export default function EventEditScreen({ match, history }) {
                     }}
                     inputProps={{
                       required: true,
-                      type: "brand",
+                      type: "text",
                       value: brand,
                       onChange: (e) => setBrand(e.target.value),
                       endAdornment: (
@@ -251,24 +252,7 @@ export default function EventEditScreen({ match, history }) {
                     inputProps={{
                       type: "number",
                       value: countInStock, //did not add brackets
-                      onChange: (e) => setCountInStock(e.target.value),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <LocalOfferIcon className={classes.inputIconsColor} />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                  <CustomInput
-                    labelText="Enter Stock..."
-                    id="countInStock"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      type: "number",
-                      value: countInStock, //did not add brackets
-                      onChange: (e) => setCountInStock(e.target.value),
+                      onChange: (e) => setCountInStock(Number(e.target.value)),
                       endAdornment: (
                         <InputAdornment position="end">
                           <LocalOfferIcon className={classes.inputIconsColor} />
